@@ -4,10 +4,15 @@ Kısa: API testleri için xUnit tabanlı proje. Testler `ApiTesting.Specs` için
 
 Hızlı başlatma (lokal):
 
+[![CI](https://github.com/sevimliahmet/api_testing_csharp/actions/workflows/ci.yml/badge.svg)](https://github.com/sevimliahmet/api_testing_csharp/actions/workflows/ci.yml)
+
+## Hızlı başlatma (lokal)
+
 ```bash
 dotnet --info
 dotnet restore
 dotnet test ApiTesting.Specs/ApiTesting.Specs.csproj
+
 ```
 
 CI (GitHub Actions):

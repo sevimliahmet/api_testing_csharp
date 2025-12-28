@@ -22,10 +22,11 @@ public class PostsTests
 
         using var json = JsonDocument.Parse(result.Body);
         json.RootElement.GetProperty("id").GetInt32().Should().Be(1);
+        json.RootElement.GetProperty("title").GetString().Should().NotBeNullOrWhiteSpace();
     }
 
     [Fact]
-    public async Task POST_should_return_201_and_expected_title()
+    public async Task POST_should_return_201_and_echo_title()
     {
         var api = new ApiClient(_s.BaseUrl, _s.TimeoutMs);
 
@@ -39,5 +40,6 @@ public class PostsTests
 
         using var json = JsonDocument.Parse(result.Body);
         json.RootElement.GetProperty("title").GetString().Should().Be("hello");
+        json.RootElement.GetProperty("id").GetInt32().Should().BeGreaterThan(0);
     }
 }
