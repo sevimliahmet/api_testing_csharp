@@ -27,3 +27,25 @@ Diğer notlar:
 - `FluentAssertions` kullanımında ticari lisans kısıtları olabilir; ticari kullanım planlıyorsanız lisans kontrolü yapın.
 
 İstersen CI workflow'unda TRX → GitHub Checks raporlamasını veya Codecov entegrasyonunu özelleştireyim.
+
+## CI Pipeline
+
+This project includes a GitHub Actions CI pipeline that:
+
+- Builds the solution
+- Starts a demo API
+- Runs API integration tests
+- Generates test results and coverage artifacts
+
+The pipeline is automatically triggered on pull requests and merges to `main`.
+
+## Demo API ile lokal test
+
+Projede `ApiTesting.DemoApi` adında basit bir demo API var. Testleri gerçek bir endpoint’e bağlamak için bunu kullandım.
+
+### 1) Demo API’yi çalıştır
+```bash
+cd ApiTesting.DemoApi
+dotnet run
+
+
