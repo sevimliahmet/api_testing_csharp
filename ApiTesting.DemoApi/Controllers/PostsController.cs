@@ -31,4 +31,9 @@ public class PostsController : ControllerBase
     }
 }
 
-public record PostRequest(string Title, string Body, int UserId);
+public class PostRequest
+{
+    public string Title { get; set; } = string.Empty;
+    public string Body { get; set; } = string.Empty;
+    public int UserId { get; set; }
+}
