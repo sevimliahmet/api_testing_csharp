@@ -13,6 +13,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -28,9 +29,35 @@ jobs:
       - name: Build
         run: dotnet build --configuration Release --no-restore
 
+      # 🔥 DEMO API'Yİ AYAĞA KALDIRMACA
+      - name: Start Demo API
+        run: |
+          cd ApiTesting.DemoApi
+          dotnet run --urls=http://localhost:5052 &
+          echo "Demo API started"
+
+      # ⏳ API AYAĞA KALKANA KADAR BEKLEMECE
+      - name: Wait for Demo API
+        run: |
+          for i in {1..20}; do
+            if curl -s http://localhost:5052/health; then
+              echo "API is up"
+              exit 0
+            fi
+            echo "Waiting for API..."
+            sleep 2
+          done
+          echo "API did not start in time"
+          exit 1
+
+      # ✅ TESTLER
       - name: Test (with coverage)
         run: |
-          dotnet test ApiTesting.Specs/ApiTesting.Specs.csproj --configuration Release --no-build --logger "trx;LogFileName=test_results.trx" --collect:"XPlat Code Coverage"
+          dotnet test ApiTesting.Specs/ApiTesting.Specs.csproj \
+            --configuration Release \
+            --no-build \
+            --logger "trx;LogFileName=test_results.trx" \
+            --collect:"XPlat Code Coverage"
 
       - name: Upload test results
         uses: actions/upload-artifact@v4
@@ -38,7 +65,7 @@ jobs:
           name: test-results
           path: '**/TestResults/*.trx'
 
-      - name: Publish test results to Checks (dorny/test-reporter)
+      - name: Publish test results to Checks
         uses: dorny/test-reporter@v1
         if: always()
         with:
