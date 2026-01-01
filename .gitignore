@@ -48,4 +48,18 @@ _ReSharper*/
 
 # Coverage output
 **/coverage.opencover.xml
+coverage/
+coverage.cobertura.xml
+
+# Test artifacts
+*.trx
+TestResults/
+.testParameters
+CodeMetricsResults.json
+
+# IDE specific
+.vscode/
+.vs/
+.rider/
+*.sln.iml
 **/coverage.cobertura.xml
