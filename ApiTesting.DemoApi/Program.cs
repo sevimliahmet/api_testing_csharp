@@ -6,6 +6,7 @@ var app = builder.Build();
 
 app.MapControllers();
 
+// CI health check
 app.MapGet("/health", () => Results.Ok(new { status = "ok" }));
 
 app.Run();
