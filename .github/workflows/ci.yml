@@ -27,16 +27,17 @@ jobs:
         run: dotnet restore
 
       - name: Build
-        run: dotnet build --configuration Release --no-restore
+        run: dotnet build --configuration Release
 
-      # 🔥 DEMO API'Yİ AYAĞA KALDIRMACA
+      # 🔥 Demo API'yi ayağa kaldır
       - name: Start Demo API
         run: |
           cd ApiTesting.DemoApi
-          dotnet run --urls=http://localhost:5052 &
-          echo "Demo API started"
+          nohup dotnet run --urls=http://localhost:5052 > api.log 2>&1 &
+          sleep 3
+          cat api.log
 
-      # ⏳ API AYAĞA KALKANA KADAR BEKLEMECE
+      # ⏳ API ayağa kalkana kadar bekle
       - name: Wait for Demo API
         run: |
           for i in {1..20}; do
@@ -50,8 +51,10 @@ jobs:
           echo "API did not start in time"
           exit 1
 
-      # ✅ TESTLER
+      # ✅ Testler
       - name: Test (with coverage)
+        env:
+          BaseUrl: http://localhost:5052
         run: |
           dotnet test ApiTesting.Specs/ApiTesting.Specs.csproj \
             --configuration Release \
@@ -79,9 +82,3 @@ jobs:
         with:
           name: coverage
           path: '**/TestResults/**/coverage.cobertura.xml'
-
-      - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v4
-        with:
-          files: '**/TestResults/**/coverage.cobertura.xml'
-          fail_ci_if_error: false
